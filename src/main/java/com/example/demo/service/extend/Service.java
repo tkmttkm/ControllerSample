@@ -5,14 +5,24 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.util.ListUtils;
 
 import com.example.demo.entity.Entity;
 import com.example.demo.form.Form;
 import com.example.demo.repository.Repository;
 import com.example.demo.service.AbstractService;
+import com.example.demo.util.Constants;
 
 @org.springframework.stereotype.Service
 public class Service extends AbstractService<Entity> {
+
+	/** 検索の際のinputタグを格納 */
+	public static final String FORM = "form";
+	/** 検索結果を格納 */
+	public static final String FORM_LIST = "formList";
 
 	@Autowired
 	private Repository repository;
@@ -41,7 +51,7 @@ public class Service extends AbstractService<Entity> {
 	@Override
 	public void addUser(Form form) {
 		if (isExist(form)) {
-			System.err.println("idが" + form.getId() + "のデータはすでに存在します。");
+			System.err.println(getMessage(Constants.VALID_EXIST_DATA, new String[] {form.getId()}));
 		} else {
 			save(form);
 			setAddCount(getAddCount() + 1);
@@ -67,7 +77,7 @@ public class Service extends AbstractService<Entity> {
 			repository.deleteById(id);
 			setDeleteCount(getDeleteCount() + 1);
 		} else {
-			System.err.println("idが" + userId + "のデータは存在しません。");
+			System.err.println(getMessage(Constants.VALID_NOT_EXIST_DATA, new Integer[] {userId}));
 		}
 	}
 
@@ -77,7 +87,7 @@ public class Service extends AbstractService<Entity> {
 			save(form);
 			setEditCount(getEditCount() + 1);
 		} else {
-			System.err.println("idが" + form.getId() + "のデータは存在しません。");
+			System.err.println(getMessage(Constants.VALID_EXIST_DATA, new String[] {form.getId()}));
 		}
 	}
 
@@ -92,19 +102,63 @@ public class Service extends AbstractService<Entity> {
 	}
 
 	/**
+	 * 共通の{@link ModelMap}をセット
+	 * @param model
+	 */
+	public void setCommonModel(ModelMap model) {
+		model.put(Constants.TITLE_KEY, Constants.SEARCH_TITLE);
+	}
+
+	/**
+	 * エラーの存在をチェックする
+	 * @param error
+	 * @param redirect
+	 * @return エラーがあればtrue
+	 */
+	public boolean existError(BindingResult error, RedirectAttributes redirect) {
+		if (error.hasFieldErrors()) {
+			StringBuilder errorMessage = new StringBuilder();
+			for (var errors : error.getAllErrors()) {
+				errorMessage.append(errors.getDefaultMessage());
+			}
+			redirect.addFlashAttribute(Constants.ERROR_MESSAGE, errorMessage.toString());
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * 検索ボタン押下後のメソッド
+	 * @param form 検索の際のinputタグ内の値を格納
+	 * @param redirect
+	 */
+	public void search(Form form, RedirectAttributes redirect) {
+		findByUserName(form.getFull_name());
+		if (ListUtils.isEmpty(dataList)) {
+			redirect.addFlashAttribute(Constants.ERROR_MESSAGE, getMessage(Constants.VALID_EMPTY_DATALIST, null));
+		} else {
+			redirect.addFlashAttribute(FORM_LIST, getDataList());
+			redirect.addFlashAttribute(FORM, form);
+		}
+	}
+
+	/**
 	 * 存在する複数データのログを出力
 	 * @param existList 存在する複数データ
 	 * @param isExist 存在するログを出力する場合はtrue
 	 */
 	private void isExistDatasErrorLog(List<Form> existList, boolean isExist) {
-		String[] existId = new String[existList.size()];
+		String[] existIdArray = new String[existList.size()];
 		for (int i = 0; i < existList.size(); i++) {
-			existId[i] = existList.get(i).getId();
+			existIdArray[i] = existList.get(i).getId();
 		}
+		
+		String errorMessage = String.join(", ", existIdArray);
 		if (isExist) {
-			System.err.println("idが" + String.join(", ", existId) + "のデータはすでに存在します。");
+			System.err.println(getMessage(Constants.VALID_EXIST_DATA, new String[] {errorMessage}));
 		} else {
-			System.err.println("idが" + String.join(", ", existId) + "のデータは存在しません。");
+			System.err.println(getMessage(Constants.VALID_NOT_EXIST_DATA, new String[] {errorMessage}));
 		}
 	}
 

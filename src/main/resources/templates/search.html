@@ -4,12 +4,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title th:text="${title}"></title>
+	<link rel="stylesheet" th:href="@{/css/search.css}"> 
 </head>
 
 <body>
+
 	<div th:unless="${#strings.isEmpty(errorMessage)}">
-		<div th:text="${errorMessage}"></div>
+		<div th:text="${errorMessage}" style="color:red"></div>
 	</div>
+
+	<div class="input-container">
+
+		<form method="post" th:action="@{search}" th:object="${form}">
+			<label for="full_name">ユーザー名</label>
+			<input th:field="*{full_name}" type="text"></input>
+			<button type="submit">検索</button>
+		</form>
+
+	</div>
+
 	<div th:unless="${#lists.isEmpty(formList)}">
 		<table>
 
@@ -19,7 +32,6 @@
 					<th>挿入日</th>
 				</tr>
 			</thead>
-			
 
 			<tbody>
 				<tr th:each="data : ${formList}">
@@ -29,16 +41,6 @@
 			</tbody>
 
 		</table>
-	</div>
-
-	<div>
-		
-		<form method="post" th:action="@{search}" th:object="${form}">
-			<label for="full_name">ユーザー名</label>
-			<input th:field="*{full_name}" type="text" ></input>
-			<button type="submit">検索</button>
-		</form>
-		
 	</div>
 
 </body>

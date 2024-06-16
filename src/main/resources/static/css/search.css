@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+
+body {
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 20px;
+	background-color: #f4f4f9;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 18px;
+	text-align: left;
+}
+
+table th,
+table td {
+	padding: 12px 15px;
+}
+
+table thead tr {
+	background-color: #009879;
+	color: #ffffff;
+	text-align: left;
+	font-weight: bold;
+}
+
+table tbody tr {
+	border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+	background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+	border-bottom: 2px solid #009879;
+}
+
+table tbody tr:hover {
+	background-color: #f1f1f1;
+	cursor: pointer;
+}
+
+.input-container {
+	display: flex;
+	align-items: center;
+	background-color: #ffffff;
+	padding: 10px 20px;
+	border-radius: 25px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-container form {
+	width: 100%;
+}
+
+.input-container input {
+	width: 50%;
+	border:1px solid #dddddd;
+	outline: none;
+	padding: 10px;
+	font-size: 16px;
+	border-radius: 20px;
+	margin-right: 10px;
+	flex: 1;
+}
+
+.input-container button {
+	background-color: #009879;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.input-container button:hover {
+	background-color: #007b5e;
+}
