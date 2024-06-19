@@ -14,13 +14,38 @@ import com.example.demo.form.Form;
 import com.example.demo.form.Form.Search;
 import com.example.demo.service.extend.Service;
 
+/**
+ * <pre>
+ * {@link org.springframework.stereotype.Controller Controller}アノテーションを付与することで、
+ * DIコンテナにコントローラーとして登録される。
+ * {@link RequestMapping}アノテーションを付与することで、
+ * どのパスでこのコントローラーが動作するのかを指定する。
+ * 今回は、パスの指定がないため、ローカル軌道で、http://localhost:8080/ でこのコントローラーが動作する
+ * パスの指定をする場合は、{@code @RequestMapping("パス")}のような書き方をして指定する。
+ * すると、http://localhost:8080/パス でこのコントローラーを通る
+ * </pre>
+ * @author Takumi
+ *
+ */
 @org.springframework.stereotype.Controller
 @RequestMapping
 public class Controller {
 
+	/** DIコンテナに登録してある{@link Service}クラスを取り出す */
 	@Autowired
 	private Service service;
 
+	/**
+	 * <pre>
+	 * Getでリクエストが来た際にこのメソッドを通る。
+	 * 今回は{@link GetMapping}にパスの指定がないため、
+	 * 全体に付与されている{@link RequestMapping}のパスと合わせて、
+	 * http://localhost:8080/ でgetリクエストが来た際にこのメソッドを通る。
+	 * </pre>
+	 * @param model viewからもらう、viewへ渡す情報のようなもの
+	 * @param form modelの中でも、formというkey名がつけられているmodel
+	 * @return 表示したいhtmlのファイルパス（拡張子抜きで相対パスで指定）
+	 */
 	@GetMapping
 	public String init(ModelMap model, @ModelAttribute(Service.FORM) Form form) {
 		service.setCommonModel(model);
