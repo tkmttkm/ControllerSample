@@ -139,8 +139,8 @@ public class Service extends AbstractService<Entity> {
 			redirect.addFlashAttribute(Constants.ERROR_MESSAGE, getMessage(Constants.VALID_EMPTY_DATALIST, null));
 		} else {
 			redirect.addFlashAttribute(FORM_LIST, getDataList());
-			redirect.addFlashAttribute(FORM, form);
 		}
+		redirect.addFlashAttribute(FORM, form);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class Service extends AbstractService<Entity> {
 		for (int i = 0; i < existList.size(); i++) {
 			existIdArray[i] = existList.get(i).getId();
 		}
-		
+
 		String errorMessage = String.join(", ", existIdArray);
 		if (isExist) {
 			System.err.println(getMessage(Constants.VALID_EXIST_DATA, new String[] {errorMessage}));
