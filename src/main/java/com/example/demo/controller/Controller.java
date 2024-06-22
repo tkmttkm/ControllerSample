@@ -44,7 +44,7 @@ public class Controller {
 	 * </pre>
 	 * @param model viewからもらう、viewへ渡す情報のようなもの
 	 * @param form modelの中でも、formというkey名がつけられているmodel
-	 * @return 表示したいhtmlのファイルパス（拡張子抜きで相対パスで指定）
+	 * @return 表示したいhtmlのファイルパス（拡張子抜きで相対パスで指定） 今回は」search.htmlを表示
 	 */
 	@GetMapping
 	public String init(ModelMap model, @ModelAttribute(Service.FORM) Form form) {
@@ -52,12 +52,24 @@ public class Controller {
 		return "search";
 	}
 
+	/**
+	 * <pre>
+	 * パス http://localhost;8080/search でpostリクエストを受けると
+	 * このメソッドを通る
+	 * </pre>
+	 * @param form
+	 * @param error formのエラーをこのerrorで受けとる
+	 * @param redirect メソッドへパスを指定して投げなおす際の情報を格納する
+	 * @return redirect;を指定することで、そのあとのパスの指定があるコントローラーへメソッドを投げることができる。
+	 * 今回は何も指定がないため、http;//localhost;8080/でリクエストを受けた際に通るメソッドへ投げる。
+	 * このControllerの場合は{@link #init(ModelMap, Form)}へ繋げる
+	 */
 	@PostMapping("/search")
 	public String search(@Validated(Search.class) Form form, BindingResult error, RedirectAttributes redirect) {
 		if (!service.existError(error, redirect)) {
 			service.search(form, redirect);
 		}
-		
+
 		return "redirect:";
 	}
 
