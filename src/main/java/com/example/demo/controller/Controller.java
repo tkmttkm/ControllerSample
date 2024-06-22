@@ -54,14 +54,14 @@ public class Controller {
 
 	/**
 	 * <pre>
-	 * パス http://localhost;8080/search でpostリクエストを受けると
+	 * パス http://localhost:8080/search でpostリクエストを受けると
 	 * このメソッドを通る
 	 * </pre>
-	 * @param form
+	 * @param form {@link Validated}の引数にインターフェースを記載することでどのフィールドをバリデーションするのかを指定する
 	 * @param error formのエラーをこのerrorで受けとる
 	 * @param redirect メソッドへパスを指定して投げなおす際の情報を格納する
 	 * @return redirect;を指定することで、そのあとのパスの指定があるコントローラーへメソッドを投げることができる。
-	 * 今回は何も指定がないため、http;//localhost;8080/でリクエストを受けた際に通るメソッドへ投げる。
+	 * 今回は何も指定がないため、http;//localhost:8080/でリクエストを受けた際に通るメソッドへ投げる。
 	 * このControllerの場合は{@link #init(ModelMap, Form)}へ繋げる
 	 */
 	@PostMapping("/search")

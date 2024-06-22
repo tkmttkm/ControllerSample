@@ -25,23 +25,23 @@ public abstract class AbstractService<T> implements IService {
 
 	/** 取得したデータ */
 	protected List<T> dataList = new ArrayList<T>();
-	
+
 	/** 取得したデータ数 */
 	protected int dataListSize;
-	
+
 	/** 追加したデータ数 */
 	protected int addCount;
-	
+
 	/** 削除したデータ数 */
 	protected int deleteCount;
-	
+
 	/** 編集したデータ数 */
 	protected int editCount;
-	
+
 	/** messages.propertiesの文言取得 */
 	@Autowired
 	protected MessageSource messageSource;
-	
+
 	/**
 	 * messages.propertiesからメッセージ取得
 	 * @param messageKey messages.propertiesのkey
@@ -49,10 +49,12 @@ public abstract class AbstractService<T> implements IService {
 	 * @return メッセージ
 	 */
 	public String getMessage(String messageKey, Object[] args) {
+		//標準メッセージを設定
 		String defaultMessage = messageSource.getMessage(Constants.DEAULT_ERROR_MESSAGE, null, Locale.JAPANESE);
+		//第一引数にmessages.propertiesのkeyを、第二引数にそのメッセージに代入したい値を、第三引数に標準のメッセージをセット
 		return messageSource.getMessage(messageKey, args, defaultMessage, Locale.JAPANESE);
 	}
-	
+
 	public int getDataListSize() {
 		return dataList.size();
 	}
